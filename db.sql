@@ -108,7 +108,8 @@ create table stone_log(
 	user_id bigint(20) unsigned not null comment '用户id',
 	log varchar(100) not null comment '日志信息，例如：送给  xxx 2颗能量石，xxx需要标记高亮' 
 	log_time date not null comment '记录时间',
-	status int(1) default 0 comment '卡包状态'
+	stone_count int(11) default 0 comment '变动的能量石数'，
+	status int(1) default 0 comment '状态'
 )engine=innod default charset=utf8 auto_increment=1;
 
 
