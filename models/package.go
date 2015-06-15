@@ -8,47 +8,49 @@ import (
 )
 
 type Card struct(
-	Id uint64
-	user_id uint64
-	Url string
-	Title string
-	Content string
-	Isprivate int
-	City string
-	Status int
+	Id uint64 `orm:"pk;auto"`
+	User *User `orm:"rel(fk);column(user_id)"`
+	Url string `orm:"null;size(100)"`
+	Title string `orm:"size(100)"`
+	Content string `orm:"size(65535)"`
+	Isprivate int `orm:"default(0)"`
+	City string `orm:"size(20)"`
+	Status int `orm:"default(0)"`
 	Create_time time.Time
 )
 
 type Package struct{
-	Id uint64
-	User_id uint64
-	Url string
-	Packagename string
-	Isprivate int
-	Status int
+	Id uint64 `orm:"pk;auto"`
+	User *User `orm:"rel(fk);column(user_id)"`
+	Url string `orm:"null;size(100)"`
+	Packagename string  `orm:"size(100)"`
+	Isprivate int `orm:"default(0)"`
+	Status int `orm:"default(0)"`
 	Create_time time.Time
+	Cards []*Card  `orm:"rel(m2m);rel_through(models.PackageCard)"`
 }
 
 type PackageCard struct{
-	Id uint64
-	Card_id uint64
-	Package_id uint64
-	Category int
+	Id uint64 `orm:"pk;auto"`
+	Card *Card `orm:"rel(fk);column(card_id)"`
+	Package *Package `orm:"rel(fk);column(package_id)"`
+	Category int `orm:"default(0)"`
 }
 
 type Theme struct{
-	Id uint64
-	Url string
-	Bgurl string
-	Packagename string
-	Status int
+	Id uint64 `orm:"pk;auto"`
+	Url string `orm:"null;size(100)"`
+	Bgurl string `orm:"null;size(100)"`
+	Packagename string `orm:"size(100)"`
+	Status int `orm:"default(0)"`
 	Create_time time.Time
+	Cards []*Card  `orm:"rel(m2m);rel_through(models.ThemeCard)"`
 } 
 
 type ThemeCard struct{
-	Id uint64
-	Card_id uint64
-	Theme_id uint64
+	Id uint64 `orm:"pk;auto"`
+	Card *Card `orm:"rel(fk);column(card_id)"`
+	Theme *Theme `orm:"rel(fk);column(theme_id)"`
 }
 
 //定义表名
@@ -66,4 +68,17 @@ func (u *Theme) TableName() string {
 }
 func (u *ThemeCard) TableName() string {
     return "theme_card"
+}
+
+func NewCard() *Card {
+	obj := new(Card)
+	return obj
+}
+func NewPackage() *Package {
+	obj := new(Package)
+	return obj
+}
+func NewTheme() *Theme {
+	obj := new(Theme)
+	return obj
 }

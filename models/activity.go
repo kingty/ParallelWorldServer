@@ -8,32 +8,32 @@ import (
 )
 
 type Follow struct{
-	Id uint64
-	Follower_id uint64
-	Followeder_id uint64
-	Isfollowed int
+	Id uint64 `orm:"pk;auto"`
+	Follower *User `orm:"rel(fk);column(follower_id)"`
+	Followeder *User `orm:"rel(fk);column(followeder_id)"`
+	Isfollowed int `orm:"default(0)"`
 	Follow_time time.Time
 }
 
 
 type Message struct{
-	Id uint64
-	Sender_id uint64
-	Receiver_id uint64
-	Card_id uint64
-	Content string
+	Id uint64 `orm:"pk;auto"`
+	Sender *User `orm:"rel(fk);column(sender_id)"`
+	Receiver *User `orm:"rel(fk);column(receiver_id)"`
+	Card *Card  `orm:"rel(fk);column(card_id)"`
+	Content string `orm:"size(65535)"`
 	Send_time time.Time
-	Status int
+	Status int`orm:"default(0)"`
 }
 
 
 type StoneLog{
-	Id uint64
-	User_id uint64
-	Log string
+	Id uint64 `orm:"pk;auto"`
+	User *User `orm:"rel(fk);column(user_id)"`
+	Log string 
 	Log_time time.Time
-	Stone_count int
-	Status int
+	Stone_count int 
+	Status int `orm:"default(0)"`
 }
 
 //定义表名
@@ -47,4 +47,17 @@ func (u *Message) TableName() string {
 
 func (u *StoneLog) TableName() string {
     return "stone_log"
+}
+
+func NewFollow() *Follow {
+	obj := new(Follow)
+	return obj
+}
+func NewMessage() *Message {
+	obj := new(Message)
+	return obj
+}
+func NewStoneLog() *StoneLog {
+	obj := new(StoneLog)
+	return obj
 }
