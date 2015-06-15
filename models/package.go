@@ -2,12 +2,12 @@
 
 package models
 import (
-    "fmt"
+    
     "github.com/astaxie/beego/orm"
 	"time"
 )
 
-type Card struct(
+type Card struct{
 	Id uint64 `orm:"pk;auto"`
 	User *User `orm:"rel(fk);column(user_id)"`
 	Url string `orm:"null;size(100)"`
@@ -17,7 +17,7 @@ type Card struct(
 	City string `orm:"size(20)"`
 	Status int `orm:"default(0)"`
 	Create_time time.Time
-)
+}
 
 type Package struct{
 	Id uint64 `orm:"pk;auto"`
@@ -27,7 +27,7 @@ type Package struct{
 	Isprivate int `orm:"default(0)"`
 	Status int `orm:"default(0)"`
 	Create_time time.Time
-	Cards []*Card  `orm:"rel(m2m);rel_through(models.PackageCard)"`
+	Cards []*Card  `orm:"rel(m2m);rel_through(ParallelWorldServer/models.PackageCard)"`
 }
 
 type PackageCard struct{
@@ -44,7 +44,7 @@ type Theme struct{
 	Packagename string `orm:"size(100)"`
 	Status int `orm:"default(0)"`
 	Create_time time.Time
-	Cards []*Card  `orm:"rel(m2m);rel_through(models.ThemeCard)"`
+	Cards []*Card  `orm:"rel(m2m);rel_through(ParallelWorldServer/models.ThemeCard)"`
 } 
 
 type ThemeCard struct{
@@ -81,4 +81,10 @@ func NewPackage() *Package {
 func NewTheme() *Theme {
 	obj := new(Theme)
 	return obj
+}
+
+func init() {
+    // 需要在init中注册定义的model
+    orm.RegisterModel(NewCard(), NewPackage(),NewTheme(),new(PackageCard),new(ThemeCard))
+	
 }

@@ -2,7 +2,7 @@
 
 package models
 import (
-    "fmt"
+    
     "github.com/astaxie/beego/orm"
 	"time"
 )
@@ -43,4 +43,10 @@ func NewUser() *User {
 func NewUserDetail() *UserDetail {
 	obj := new(UserDetail)
 	return obj
+}
+
+func init() {
+    // 需要在init中注册定义的model
+    orm.RegisterModel(NewUser(), NewUserDetail())
+	
 }

@@ -2,7 +2,6 @@
 
 package models
 import (
-    "fmt"
     "github.com/astaxie/beego/orm"
 	"time"
 )
@@ -27,7 +26,7 @@ type Message struct{
 }
 
 
-type StoneLog{
+type StoneLog struct{
 	Id uint64 `orm:"pk;auto"`
 	User *User `orm:"rel(fk);column(user_id)"`
 	Log string 
@@ -60,4 +59,10 @@ func NewMessage() *Message {
 func NewStoneLog() *StoneLog {
 	obj := new(StoneLog)
 	return obj
+}
+
+func init() {
+    // 需要在init中注册定义的model
+    orm.RegisterModel(NewFollow(), NewMessage(),NewStoneLog())
+	
 }
