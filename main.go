@@ -1,16 +1,16 @@
 package main
 
 import (
-//	_ "ParallelWorld/routers"
-//	"github.com/astaxie/beego"
+	_ "ParallelWorldServer/routers"
+	"github.com/astaxie/beego"
 
 
-	"fmt"
-//    "github.com/astaxie/beego/orm"
-    _ "github.com/go-sql-driver/mysql"
-	m "ParallelWorldServer/models"
-	"time"
-	. "ParallelWorldServer/service"
+//	"fmt"
+////    "github.com/astaxie/beego/orm"
+//    _ "github.com/go-sql-driver/mysql"
+//	m "ParallelWorldServer/models"
+//	"time"
+//	. "ParallelWorldServer/service"
 	
 
 )
@@ -18,28 +18,28 @@ import (
 
 
 func main() {
-//	beego.Run()
+	beego.Run()
 //	o := orm.NewOrm()
 //    err := o.Using("test") // 默认使用 default，你可以指定为其他数据库
 
 	
     
 	
-	user := m.NewUser()
-    user.Email="398036897qq.com"
-	user.Password = "kingty"
-	user.Register_time = time.Now()
+//	user := m.NewUser()
+//    user.Email="398036897qq.com"
+//	user.Password = "kingty"
+//	user.Register_time = time.Now()
     
 
-    row,err := m.AddUser(user)
+//    row,err := m.AddUser(user)
 	
-    fmt.Println(err,row)
+//    fmt.Println(err,row)
 	
-	//接口
-	var userInterface UserInterface  = new(UserService)
+//	//接口
+//	var userInterface UserInterface  = new(UserService)
 	
-	islogin,err2 := userInterface.Login("398036899@qq.com","123")
-	fmt.Println(islogin,err2)
+//	islogin,err2 := userInterface.Login("398036899@qq.com","123")
+//	fmt.Println(islogin,err2)
 	
 
 	

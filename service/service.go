@@ -5,8 +5,9 @@ import(
 //	. "ParallelWorldServer/models"
 )
 
+//公共服务
 type CommomService struct{
-	Service string
+	
 }
 
 /**
