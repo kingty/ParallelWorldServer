@@ -1,6 +1,7 @@
 package models
 import(
 	"fmt"
+	"log"
 	"encoding/json"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -40,6 +41,10 @@ func getORM() orm.Ormer{
 }
 
 
+
+func Log(v ... interface{}){
+	log.Println(v...)
+}
 func init() {
     orm.RegisterDriver("mysql", orm.DR_MySQL)
 

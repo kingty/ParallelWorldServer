@@ -2,15 +2,21 @@
 
 package models
 import (
-    
+    "errors"
+	. "ParallelWorldServer/lib"
     "github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/validation"
 	"time"
-	"fmt"
+	
+)
+const(
+	nomarl_state = iota
+	delete_state 
 )
 
 type User struct{
 	Id int64 `orm:"pk;auto"`
-	Email string `orm:"size(100)"`
+	Email string `orm:"size(100)" valid:"Email"`
 	Password string `orm:"size(50)"`
 	Status int `orm:"default(0)"`
 	Register_time time.Time
@@ -28,20 +34,49 @@ func NewUser() *User {
 }
 
 
-
+func checkUser(u *User)(err error){
+	valid := validation.Validation{}
+	b, _ := valid.Valid(u)
+	if !b {
+		for _, err := range valid.Errors {
+			Log(err.Key, err.Message)
+			return errors.New(err.Message)
+		}
+	}
+	return nil
+}
 
 func  GetUserById(id int64) (User,error){
 	o := getORM()
 	user  := User{Id:id}
 	err:=o.Read(&user)
 	if err == orm.ErrNoRows {
-    	fmt.Println("查询不到")
+    		Log("查询不到")
 	} else if err == orm.ErrMissPK {
-	    fmt.Println("找不到主键")
+	    Log("找不到主键")
 	} else if err!=nil{
-	    fmt.Println(err)
+	    Log(err.Error())
 	}else{
-		fmt.Println(user)
+		Log(user)
+		
+		
+	}
+	
+	return user,err
+}
+
+func  GetUserByEmail(email string) (User,error){
+	o := getORM()
+	user := User{Email: email}
+	err := o.Read(&user, "Email")
+	if err == orm.ErrNoRows {
+    		Log("查询不到")
+	} else if err == orm.ErrMissPK {
+	    Log("找不到主键")
+	} else if err!=nil{
+	    Log(err.Error())
+	}else{
+		Log(user)
 		
 		
 	}
@@ -50,12 +85,32 @@ func  GetUserById(id int64) (User,error){
 }
 
 func AddUser(u *User)(int64, error){
+	if err := checkUser(u); err != nil {
+		return 0, err
+	}
 	o := getORM()
+	u.Password = Strtomd5(u.Password)
 	id,err := o.Insert(u)
 	if err!=nil{
-		fmt.Println(err)
+		Log(err)
+		return 0,err
 	}
 	return id,err
+}
+
+
+/*
+*非物理删除
+*/
+func DeleteUser(u *User)(int64, error) {
+	o := getORM()
+	u.Status = delete_state
+	num,err := o.Update(u, "status")
+	if err!=nil{
+		Log(err)
+		return 0,err
+	}
+	return num, err
 }
 
 func init() {
