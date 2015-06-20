@@ -6,8 +6,12 @@ import(
 
 //错误类型代码定义
 const (
-	WRONG_PASSWORD = iota
+	COMMOM = iota
+	WRONG_PASSWORD
 	NOUSER
+	CACHERROR
+	NOTOKEN
+	EMAILEXIST
 	
 	
 )

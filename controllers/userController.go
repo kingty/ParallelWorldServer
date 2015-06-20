@@ -1,26 +1,29 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
+
 	. "ParallelWorldServer/service"
 	. "ParallelWorldServer/dto"
+	. "ParallelWorldServer/lib"
+
 )
 
 type UserController struct {
-	beego.Controller
+	MainController
 }
 
+var userInterface UserInterface  = new(UserService)
+
 func (this *UserController) Login() {
-	var userInterface UserInterface  = new(UserService)
-	isLogin,err := userInterface.Login("398036899@qq.com","123")
-	loginMessage := NewLoginMessage()
 	
+	id,err := userInterface.Login("kingty@mofunsky.com","4652660")
+	loginMessage := NewLoginMessage()
 	
 	if err != nil{
 		loginMessage.Statu = 0
 		loginMessage.Message = err.Error()
 	}else{
-		if isLogin{
+		if id==0{
 			loginMessage.Statu = 0
 			loginMessage.Message = "未知错误"
 		}else{
@@ -33,4 +36,26 @@ func (this *UserController) Login() {
 	this.Data["json"] = loginMessage
     this.ServeJson()
 	
+}
+
+func(this *UserController)Register(){
+	
+	value := Strtomd5("ca9faf97c43d0a0f06cb9af8d51a1d7f"+ "kingty@mofunsky.com")
+	hastoken,err := this.CheakToken(32,value)
+	if err==nil{
+		if hastoken{
+			_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
+			if(err2==nil){
+				this.Data["json"] = "seccess"
+			}else{
+				this.Data["json"] = err2.Error()
+			}
+		}else{
+			this.Data["json"] = "unkonw error!"
+		}
+	}else{
+		this.Data["json"] =err.Error()
+	}
+	
+    this.ServeJson()
 }

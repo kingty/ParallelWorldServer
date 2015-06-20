@@ -1,7 +1,7 @@
 package models
 import(
 	"fmt"
-	"log"
+	
 	"encoding/json"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -34,17 +34,6 @@ func (e *JsonField) RawValue() interface{} {
 	return e.String()
 }
 
-
-func getORM() orm.Ormer{
-	o := orm.NewOrm()
-	return o
-}
-
-
-
-func Log(v ... interface{}){
-	log.Println(v...)
-}
 func init() {
     orm.RegisterDriver("mysql", orm.DR_MySQL)
 

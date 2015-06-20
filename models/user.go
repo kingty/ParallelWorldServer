@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego/validation"
 	"time"
 	
+	
 )
 const(
 	nomarl_state = iota
@@ -47,7 +48,7 @@ func checkUser(u *User)(err error){
 }
 
 func  GetUserById(id int64) (User,error){
-	o := getORM()
+	o := GetORM()
 	user  := User{Id:id}
 	err:=o.Read(&user)
 	if err == orm.ErrNoRows {
@@ -66,7 +67,7 @@ func  GetUserById(id int64) (User,error){
 }
 
 func  GetUserByEmail(email string) (User,error){
-	o := getORM()
+	o := GetORM()
 	user := User{Email: email}
 	err := o.Read(&user, "Email")
 	if err == orm.ErrNoRows {
@@ -88,8 +89,9 @@ func AddUser(u *User)(int64, error){
 	if err := checkUser(u); err != nil {
 		return 0, err
 	}
-	o := getORM()
+	o := GetORM()
 	u.Password = Strtomd5(u.Password)
+	u.Register_time = time.Now()
 	id,err := o.Insert(u)
 	if err!=nil{
 		Log(err)
@@ -103,7 +105,7 @@ func AddUser(u *User)(int64, error){
 *非物理删除
 */
 func DeleteUser(u *User)(int64, error) {
-	o := getORM()
+	o := GetORM()
 	u.Status = delete_state
 	num,err := o.Update(u, "status")
 	if err!=nil{
@@ -113,8 +115,12 @@ func DeleteUser(u *User)(int64, error) {
 	return num, err
 }
 
+
+
+
 func init() {
     // 需要在init中注册定义的model
     orm.RegisterModel(NewUser())
 	
 }
+

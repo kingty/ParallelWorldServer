@@ -5,6 +5,7 @@ import (
     
     "github.com/astaxie/beego/orm"
 	"time"
+	. "ParallelWorldServer/lib"
 )
 
 
@@ -36,7 +37,7 @@ func NewUserDetail() *UserDetail {
 *不会取出User的值
 */
 func  GetUserDetailById(id int64) (UserDetail,error){
-	o := getORM()
+	o := GetORM()
 	userDetail  := UserDetail{Id:id}
 	err:=o.Read(&userDetail)
 	if err == orm.ErrNoRows {
@@ -55,7 +56,7 @@ func  GetUserDetailById(id int64) (UserDetail,error){
 }
 
 func AddUserDetail(u *UserDetail)(int64, error){
-	o := getORM()
+	o := GetORM()
 	id,err := o.Insert(u)
 	if err!=nil{
 		Log(err)

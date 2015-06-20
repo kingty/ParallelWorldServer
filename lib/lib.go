@@ -3,6 +3,9 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"strconv"
+	"log"
+	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/cache"
 )
 
 //create md5 string
@@ -31,4 +34,24 @@ func StringsToJson(str string) string {
 	}
 
 	return jsons
+}
+
+
+
+func GetORM() orm.Ormer{
+	o := orm.NewOrm()
+	return o
+}
+
+
+
+func Log(v ... interface{}){
+	log.Println(v...)
+}
+
+
+func GetCACHE() (cache.Cache, error){
+	bm, err := cache.NewCache("memory", `{"conn":"127.0.0.1:11211"}`)
+	return bm,err
+	
 }
