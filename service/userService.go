@@ -33,12 +33,15 @@ func(u *UserService) Login(email string,passWord string) (int64,error){
 		bm, err := GetCACHE()
 		 if(err==nil){
 			key := strconv.FormatInt(user.Id,10)
-			value,_ := u.GetUserTokenString(user)
-		
-			Log(key+":"+value)
-			bm.Put( key,value,1000*60*60)
+			value,err2 := u.GetUserTokenString(user)
+			if err2==nil{	
+				bm.Put( key,value,1000*60*60)
+				return user.Id,nil
+			}else{
+				return user.Id,err2
+			}
 			
-			return user.Id,nil
+			
 		}else{
 			
 			return 0,err

@@ -4,8 +4,9 @@ import (
 
 	. "ParallelWorldServer/service"
 	. "ParallelWorldServer/dto"
-	. "ParallelWorldServer/lib"
-
+//	. "ParallelWorldServer/lib"
+	"strings"
+	
 )
 
 type UserController struct {
@@ -15,46 +16,57 @@ type UserController struct {
 var userInterface UserInterface  = new(UserService)
 
 func (this *UserController) Login() {
+	version := this.GetString("v")
 	
-	id,err := userInterface.Login("kingty@mofunsky.com","4652660")
 	loginMessage := NewLoginMessage()
 	
-	if err != nil{
-		loginMessage.Statu = 0
-		loginMessage.Message = err.Error()
-	}else{
-		if id==0{
+	if(strings.EqualFold(Version_1_0,version)){
+		id,err := userInterface.Login("kingty@mofunsky.com","4652660")
+		if err != nil{
 			loginMessage.Statu = 0
-			loginMessage.Message = "未知错误"
+			loginMessage.Message = err.Error()
 		}else{
-			loginMessage.Statu = 1
-			loginMessage.Message = "登陆成功"
+			if id==0{
+				loginMessage.Statu = 0
+				loginMessage.Message = "未知错误"
+			}else{
+				loginMessage.Statu = 1
+				loginMessage.Message = "登陆成功"
+			}
+			
+			
 		}
-		
-		
+	}else{
+		loginMessage.Statu = 0
+		loginMessage.Message = "版本号错误！"
 	}
+	
+	
 	this.Data["json"] = loginMessage
     this.ServeJson()
 	
 }
 
 func(this *UserController)Register(){
-	
-	value := Strtomd5("ca9faf97c43d0a0f06cb9af8d51a1d7f"+ "kingty@mofunsky.com")
-	hastoken,err := this.CheakToken(32,value)
-	if err==nil{
-		if hastoken{
-			_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
-			if(err2==nil){
-				this.Data["json"] = "seccess"
+	version := this.GetString("v")
+	if(strings.EqualFold(Version_1_0,version)){
+		isAllow,err := this.CheakRequest(LoginUrl)
+		if err==nil{
+			if isAllow{
+				_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
+				if(err2==nil){
+					this.Data["json"] = "seccess"
+				}else{
+					this.Data["json"] = err2.Error()
+				}
 			}else{
-				this.Data["json"] = err2.Error()
+				this.Data["json"] = "unkonw error!"
 			}
 		}else{
-			this.Data["json"] = "unkonw error!"
+			this.Data["json"] =err.Error()
 		}
 	}else{
-		this.Data["json"] =err.Error()
+		this.Data["json"] = "版本号有误"
 	}
 	
     this.ServeJson()
