@@ -4,7 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	. "ParallelWorldServer/lib"
 	"fmt"
-	"strings"
+//	"strings"
 	"time"
 )
 
@@ -36,7 +36,7 @@ func (this *MainController) CheakRequest(url string)(bool,error){
 		dexTime := localTimestamp-timestamp//获取时间戳的差值
 		
 		
-		if(dexTime>0 && dexTime/60<10){//时间戳的差值在10分钟内为正常操作
+		if(dexTime>0 && dexTime/60<2){//时间戳的差值在2分钟内为正常操作,超过2分钟后的操作视为非正常操作
 			bm, err := GetCACHE()
 			if(err==nil){
 					token := bm.Get(userId)	//取出服务端缓存的token值
@@ -44,9 +44,9 @@ func (this *MainController) CheakRequest(url string)(bool,error){
 						//对 url&token=xxx&timestamp=xxx  进行签名验证，不让token在url中传输，防止token被截取
 						
 						timestampStr := fmt.Sprintf("%d", timestamp)  
-						value := Strtomd5(url+"&token="+token.(string)+"&timestamp="+timestampStr)
+						signKey := url+"&token="+token.(string)+"&timestamp="+timestampStr
 						
-						if strings.EqualFold(value,sign){
+						if Verify(signKey,sign){
 							
 							return true,nil
 						}else{

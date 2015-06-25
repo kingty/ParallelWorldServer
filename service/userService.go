@@ -7,7 +7,7 @@ import(
 	. "ParallelWorldServer/lib"
 //	"github.com/astaxie/beego/cache"
 	"strconv"
-	"strings"
+//	"strings"
 )
 
 //user业务
@@ -27,8 +27,7 @@ func(u *UserService) Login(email string,passWord string) (int64,error){
 	if err != nil{
 		return 0,err
 	}
-	pw := Strtomd5(passWord)
-	if strings.EqualFold(pw, user.Password){
+	if Verify(passWord,user.Password){
 		//将生成的token 存入memcache缓存中
 		bm, err := GetCACHE()
 		 if(err==nil){

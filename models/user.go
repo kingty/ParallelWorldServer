@@ -90,7 +90,7 @@ func AddUser(u *User)(int64, error){
 		return 0, err
 	}
 	o := GetORM()
-	u.Password = Strtomd5(u.Password)
+	u.Password = GenerateMD5WithSalt(u.Password)
 	u.Register_time = time.Now()
 	id,err := o.Insert(u)
 	if err!=nil{

@@ -20,6 +20,6 @@ func(this *CommomService) GetUserTokenString (u User)(string,error){
 	if(u.Email==""||u.Password==""){
 		return "",NewError(COMMOM,"密码和邮箱为空")
 	}
-	return Strtomd5(u.Password+ u.Email),nil
+	return GenerateMD5WithSalt(u.Password+ u.Email),nil
 	
 }

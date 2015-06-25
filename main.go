@@ -10,7 +10,7 @@ import (
 //    _ "github.com/go-sql-driver/mysql"
 //	m "ParallelWorldServer/models"
 //	"time"
-//	. "ParallelWorldServer/service"
+//	. "ParallelWorldServer/lib"
 	
 
 )
@@ -19,6 +19,9 @@ import (
 
 func main() {
 	beego.Run()
+//	fmt.Println(Generate("sss"))
+
+//	fmt.Println(Verify("ssss","492d8954e89968f703292937511991c76f25678e96504774"))
 //	o := orm.NewOrm()
 //    err := o.Using("test") // 默认使用 default，你可以指定为其他数据库
 
