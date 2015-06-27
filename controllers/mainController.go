@@ -14,6 +14,10 @@ type MainController struct {
 
 
 
+func NewMainController() *MainController {
+	obj := new(MainController)
+	return obj
+}
 const(
 	BaseUrl = ""//项目根url
 	Version_1_0 = "1.0"//api版本号

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/cache"
-	 "math/rand"
+	"math/rand"
 )
 
 
@@ -38,7 +38,7 @@ func GenerateMD5WithSalt(s string) (string){
 	return string(cs[:])
 }
 
-//验证密码正确与否
+//验证被加密串正确与否
 func Verify( password string,  md5Str string) bool{	
 	cs1 := new ([32]byte)
 	cs2 := new ([16]byte)

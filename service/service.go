@@ -4,7 +4,7 @@ import(
 	
 	. "ParallelWorldServer/models"
 	. "ParallelWorldServer/lib"
-
+	"strings"
 )
 
 //公共服务
@@ -17,9 +17,14 @@ type CommomService struct{
 */
 
 func(this *CommomService) GetUserTokenString (u User)(string,error){
-	if(u.Email==""||u.Password==""){
-		return "",NewError(COMMOM,"密码和邮箱为空")
+	if(strings.EqualFold(u.Email,"")){
+		return "",NewError(COMMOM,"邮箱为空")
 	}
-	return GenerateMD5WithSalt(u.Password+ u.Email),nil
+	userDetail,err := GetUserDetailById(u.Id)
+	if err!=nil{
+		return "",err
+	}
+	
+	return Pwdhash(u.Email+string(userDetail.Gender)+userDetail.Username+userDetail.Motto),nil
 	
 }

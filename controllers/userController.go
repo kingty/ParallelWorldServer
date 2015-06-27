@@ -17,6 +17,7 @@ var userInterface UserInterface  = new(UserService)
 
 func (this *UserController) Login() {
 	version := this.GetString("v")
+//	device := this.GetString("device")
 	
 	loginMessage := NewLoginMessage()
 	
@@ -50,21 +51,14 @@ func (this *UserController) Login() {
 func(this *UserController)Register(){
 	version := this.GetString("v")
 	if(strings.EqualFold(Version_1_0,version)){
-		isAllow,err := this.CheakRequest(LoginUrl)
-		if err==nil{
-			if isAllow{
-				_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
-				if(err2==nil){
-					this.Data["json"] = "seccess"
-				}else{
-					this.Data["json"] = err2.Error()
-				}
-			}else{
-				this.Data["json"] = "unkonw error!"
-			}
+		
+		_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
+		if(err2==nil){
+			this.Data["json"] = "seccess"
 		}else{
-			this.Data["json"] =err.Error()
+			this.Data["json"] = err2.Error()
 		}
+			
 	}else{
 		this.Data["json"] = "版本号有误"
 	}
