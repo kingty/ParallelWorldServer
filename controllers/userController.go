@@ -52,7 +52,7 @@ func(this *UserController)Register(){
 	version := this.GetString("v")
 	if(strings.EqualFold(Version_1_0,version)){
 		
-		_,err2 := userInterface.Register("kingty@mofunsky.com","4652660")
+		_,err2 := userInterface.Register("kingty4652660@gmail.com","11111")
 		if(err2==nil){
 			this.Data["json"] = "seccess"
 		}else{
