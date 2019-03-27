@@ -22,7 +22,7 @@ func (this *UserController) Login() {
 	loginMessage := NewLoginMessage()
 	
 	if(strings.EqualFold(Version_1_0,version)){
-		id,err := userInterface.Login("kingty@mofunsky.com","4652660")
+		id,err := userInterface.Login("kingty@mofunsky.com","xxx")
 		if err != nil{
 			loginMessage.Statu = 0
 			loginMessage.Message = err.Error()
